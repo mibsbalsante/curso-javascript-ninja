@@ -1,4 +1,6 @@
-  /*
+(function() {
+	'use strict';
+	/*
   Crie dois objetos, que serão duas pessoas. Cada um deve ter as propriedades
   `name` e `lastName`, preenchidos com o nome e sobrenome da pessoa.
   */
@@ -21,12 +23,12 @@
   console.log( 'O nome das pessoas é:' );
   // ?
 
-	function getFullName(person) {
-		return `${person.name} ${person.lastName}`;
+	function getFullName() {
+		return this.name + ' ' + this.lastName;
 	}
 
-	console.log(getFullName(person1));
-	console.log(getFullName(person2));
+	console.log(getFullName.call(person1));
+	console.log(getFullName.call(person2));
 
   /*
   Crie uma função chamada `sum`. Essa função pode receber uma lista de
@@ -37,15 +39,15 @@
   */
   // ?
 	
-	function sum(numbers) {
-		console.log(numbers);
+	function sum() {
+		console.log(arguments);
 		
-		return numbers.reduce(function(res, num) {
-			return res + num;
+		return Array.prototype.reduce.call(arguments, function(res, num) {
+			return res + Number(num);
 		}, 0)
 	}
 
-	console.log(sum([1,2,3,4,5,6,7,8,9]));
+	console.log(sum(1,2,3,4,5,6,7,8,9));
 
   /*
   Mostre no console que a função acima funciona, invocando-a em 3 console.log
@@ -54,9 +56,9 @@
   console.log( '\nSomar alguns números:' );
   // ?
 
-	console.log(sum([10,20,30,40,50]));
-	console.log(sum([1,1,2,3,5]));
-	console.log(sum([2,4,8,16,32]));
+	console.log(sum(10,20,30,40,50));
+	console.log(sum(1,1,2,3,5));
+	console.log(sum(2,4,8,16,32));
 
   /*
   Declare uma variável chamada `userEntry`, que irá receber alguns valores
@@ -84,9 +86,8 @@
   // ?
 
 	function justNumbers(text) {
-		return text.split(' ')
-			.map(char => Number(char))
-			.filter(char => !Number.isNaN(char));
+		return text.replace(/\D+/g, ',')
+			.split(',')
 	}
 
 	console.log(justNumbers);
@@ -98,7 +99,7 @@
   console.log( '\nEntrada do usuário limpa. Somente números:' );
   // ?
 
-	var numbers = sum(justNumbers(userEntry));
+	var numbers = justNumbers(userEntry);
 
   /*
   Agora com o array de números, utilize a função `sum` para somar todos os
@@ -107,4 +108,5 @@
   console.log( '\nSomar números entrados pelo usuário:' );
   // ?
 
-	console.log(numbers);
+	console.log(sum.apply(this, numbers));
+})()
