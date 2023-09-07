@@ -4,6 +4,9 @@
   */
   // ?
 
+	var person1 = { name: 'Mary', lastName: 'McMarry' };
+	var person2 = { name: 'Jane', lastName: 'McFlurry' };
+
   /*
   Agora crie uma função chamada `getFullName` que retorne as propriedades
   `name` e `lastName` dos objetos acima, formando um nome completo.
@@ -18,6 +21,13 @@
   console.log( 'O nome das pessoas é:' );
   // ?
 
+	function getFullName(person) {
+		return `${person.name} ${person.lastName}`;
+	}
+
+	console.log(getFullName(person1));
+	console.log(getFullName(person2));
+
   /*
   Crie uma função chamada `sum`. Essa função pode receber uma lista de
   parâmetros variável, e deverá retornar a soma de todos eles.
@@ -26,6 +36,16 @@
   os parâmetros passados para essa função.
   */
   // ?
+	
+	function sum(numbers) {
+		console.log(numbers);
+		
+		return numbers.reduce(function(res, num) {
+			return res + num;
+		}, 0)
+	}
+
+	console.log(sum([1,2,3,4,5,6,7,8,9]));
 
   /*
   Mostre no console que a função acima funciona, invocando-a em 3 console.log
@@ -34,6 +54,10 @@
   console.log( '\nSomar alguns números:' );
   // ?
 
+	console.log(sum([10,20,30,40,50]));
+	console.log(sum([1,1,2,3,5]));
+	console.log(sum([2,4,8,16,32]));
+
   /*
   Declare uma variável chamada `userEntry`, que irá receber alguns valores
   entrados pelo usuário. Mostre para o usuário a seguinte frase:
@@ -41,11 +65,15 @@
   */
   // ?
 
+	var userEntry = prompt('Entre com alguns números que serão somados:');
+
   /*
   Mostre no console o valor entrado pelo usuário:
   */
   console.log( '\nEntrada do usuário:' );
   // ?
+
+	console.log(userEntry);
 
   /*
   Crie uma função chamada `justNumbers`, que recebe por parâmetro uma string
@@ -55,6 +83,14 @@
   console.log( '\nFunção que limpa entrada do usuário (somente números):' );
   // ?
 
+	function justNumbers(text) {
+		return text.split(' ')
+			.map(char => Number(char))
+			.filter(char => !Number.isNaN(char));
+	}
+
+	console.log(justNumbers);
+
   /*
   Usando a função acima, faça a limpeza dos valores entrados pelo usuário,
   atribuindo o resultado à uma variável `numbers`.
@@ -62,9 +98,13 @@
   console.log( '\nEntrada do usuário limpa. Somente números:' );
   // ?
 
+	var numbers = sum(justNumbers(userEntry));
+
   /*
   Agora com o array de números, utilize a função `sum` para somar todos os
   números desse array e mostre o resultado no console.
   */
   console.log( '\nSomar números entrados pelo usuário:' );
   // ?
+
+	console.log(numbers);
