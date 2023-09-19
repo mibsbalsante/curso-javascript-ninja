@@ -23,3 +23,50 @@ multiplicação (x), então no input deve aparecer "1+2x".
 input;
 - Ao pressionar o botão "CE", o input deve ficar zerado.
 */
+(function(win, doc) {
+  let input = '';
+
+  const $output = doc.querySelector('.output');
+  const $result = doc.querySelector('.result');
+  const $clear = doc.querySelector('.clear');
+
+  const $actions = doc.querySelectorAll('.action')
+  const $numbers = doc.querySelectorAll('.number');
+
+  function getResult(value) {
+    const result = eval(value.replace(/x/g, '*'));
+    return '' + result;
+  }
+
+  function clearInput(value) {
+    return value
+      .replace(/[^0-9+\-x/]/g, '')
+      .replace(/([+\-x\/])+(?=[+\-x\/])/g, '');
+  }
+
+  Array.prototype.forEach.call($actions, function($button) {
+    $button.addEventListener('click', function($event) {
+      const action = $event.target.dataset.action;
+
+      if (action === '0' && input === '') return;
+
+      input = clearInput(input + action);
+      $output.value = input;
+      $result.removeAttribute('disabled');
+    });
+  });
+
+  $result.addEventListener('click', function($event) {
+    input = getResult(input);
+    $output.value = input;
+
+    $result.setAttribute('disabled', true);
+  });
+
+  $clear.addEventListener('click', function($event) {
+    input = '';
+    $output.value = input;
+
+    $result.setAttribute('disabled', true);
+  });
+})(window, document)
