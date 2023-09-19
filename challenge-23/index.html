@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Challenge 23</title>
+  <style>
+    .calculator {
+      padding: 40px;
+    }
+    .line {
+      width: 200px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      margin: 10px 0;
+    }
+    .output {
+      grid-column: 1 / 4;
+    }
+    .output,
+    .result,
+    .action,
+    .number {
+      font-size: 16px;
+    }
+    .clear {
+      grid-column: 3 / 5;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="line">
+      <input class="output" type="text" disabled>
+      <button class="result" disabled>=</button>
+    </div>
+    <div class="line">
+      <button class="action" data-action="+">+</button>
+      <button class="action" data-action="-">-</button>
+      <button class="action" data-action="x">x</button>
+      <button class="action" data-action="/">/</button>
+    </div>
+    <div class="line">
+      <button class="action" data-action="1">1</button>
+      <button class="action" data-action="2">2</button>
+      <button class="action" data-action="3">3</button>
+      <button class="action" data-action="4">4</button>
+      <button class="action" data-action="5">5</button>
+      <button class="action" data-action="6">6</button>
+      <button class="action" data-action="7">7</button>
+      <button class="action" data-action="8">8</button>
+      <button class="action" data-action="9">9</button>
+      <button class="action" data-action="0">0</button>
+      <button class="clear">clear</button>
+    </div>
+  </div>
+  <script src="challenge-23.js"></script>
+</body>
+</html>
