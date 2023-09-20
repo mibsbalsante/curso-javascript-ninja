@@ -24,49 +24,82 @@ input;
 - Ao pressionar o botão "CE", o input deve ficar zerado.
 */
 (function(win, doc) {
-  let input = '';
+	'use strict';
 
-  const $output = doc.querySelector('.output');
-  const $result = doc.querySelector('.result');
-  const $clear = doc.querySelector('.clear');
+  var $output = doc.querySelector('.output');
+  var $result = doc.querySelector('.result');
+  var $clear = doc.querySelector('.clear');
 
-  const $actions = doc.querySelectorAll('.action')
-  const $numbers = doc.querySelectorAll('.number');
+  var $actions = doc.querySelectorAll('.action');
+	
+	var operations = {
+		'+': function(accumulator) {
+			return function(currentValue) {
+				return accumulator + currentValue;
+			}
+		},
+		'-': function(accumulator) {
+			return function(currentValue) {
+				return accumulator - currentValue;
+			}
+		},
+		'x': function(accumulator) {
+			return function(currentValue) {
+				return accumulator * currentValue;
+			}
+		},
+		'÷': function(accumulator) {
+			return function(currentValue) {
+				return accumulator / currentValue;
+			}
+		},
+	};
 
   function getResult(value) {
-    const result = eval(value.replace(/x/g, '*'));
-    return '' + result;
+		var calc = value
+			.replace(/\D$/, '')
+			.match(/(?:\d)+|(?:\D)/g);
+
+    return calc.reduce(function(lastResult, currentValue) {
+			if(operations[currentValue]) {
+				 return operations[currentValue](lastResult);
+			}
+			if (typeof lastResult === 'function') {
+				return lastResult(Number(currentValue));
+			}
+			return Number(currentValue);
+		}, 0)
   }
 
   function clearInput(value) {
     return value
-      .replace(/[^0-9+\-x/]/g, '')
-      .replace(/([+\-x\/])+(?=[+\-x\/])/g, '');
+			.replace(/^[x÷]/, '')
+      .replace(/[^1-9+\-x÷]/g, '')
+      .replace(/([+\-x÷])+(?=[+\-x÷])/g, '');
+  }
+	
+	function handleClickAction(event) {
+		var action = event.target.dataset.action;
+
+		if ($output.value === '0' && $output.value === action) return;
+
+		$output.value = clearInput($output.value + action);
+		$result.removeAttribute('disabled');
+	}
+	
+	function handleClickResult() {
+    $output.value = getResult($output.value);
+    $result.setAttribute('disabled', true);
+  }
+	
+	function handleClickClear() {
+    $output.value = '0';
+    $result.setAttribute('disabled', true);
   }
 
   Array.prototype.forEach.call($actions, function($button) {
-    $button.addEventListener('click', function($event) {
-      const action = $event.target.dataset.action;
-
-      if (action === '0' && input === '') return;
-
-      input = clearInput(input + action);
-      $output.value = input;
-      $result.removeAttribute('disabled');
-    });
+    $button.addEventListener('click', handleClickAction);
   });
-
-  $result.addEventListener('click', function($event) {
-    input = getResult(input);
-    $output.value = input;
-
-    $result.setAttribute('disabled', true);
-  });
-
-  $clear.addEventListener('click', function($event) {
-    input = '';
-    $output.value = input;
-
-    $result.setAttribute('disabled', true);
-  });
+  $result.addEventListener('click', handleClickResult);
+  $clear.addEventListener('click', handleClickClear);
 })(window, document)
