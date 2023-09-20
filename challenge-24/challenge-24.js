@@ -25,6 +25,10 @@ input;
 */
 (function(win, doc) {
 	'use strict';
+	
+	var regInvalidCharacters = null;
+	var regInvalidCharactersAsFirst = null;
+	var regInvalidCharactersAsLast = null;
 
   var $output = null;
   var $result = null;
@@ -66,17 +70,16 @@ input;
 
   function getResult(value) {
 		var calc = value
-			.replace(/\D$/, '')
+			.replace(regInvalidCharactersAsLast, '')
 			.match(/(?:\d)+|(?:\D)/g);
-
     return calc.reduce(calculateResult, 0);
   }
 
   function clearInput(value) {
     return value
-			.replace(/^[x÷]/, '')
-      .replace(/[^1-9+\-x÷]/g, '')
-      .replace(/([+\-x÷])+(?=[+\-x÷])/g, '');
+      .replace(regInvalidCharacters, '')
+			.replace(regInvalidCharactersAsFirst, '')
+      .replace(/(\D)+(?=\D)/g, '');
   }
 
   function updateInput(value) {
@@ -103,6 +106,10 @@ input;
   }
 	
 	function initVariables() {
+		regInvalidCharacters = /[^0-9+\-x÷]/g;
+		regInvalidCharactersAsFirst = /^[0x÷]/;
+		regInvalidCharactersAsLast = /\D$/;
+		
 		$output = doc.querySelector('.output');
 		$result = doc.querySelector('.result');
 		$clear = doc.querySelector('.clear');
