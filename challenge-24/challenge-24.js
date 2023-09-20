@@ -26,11 +26,10 @@ input;
 (function(win, doc) {
 	'use strict';
 
-  var $output = doc.querySelector('.output');
-  var $result = doc.querySelector('.result');
-  var $clear = doc.querySelector('.clear');
-
-  var $actions = doc.querySelectorAll('.action');
+  var $output = null;
+  var $result = null;
+  var $clear = null;
+  var $actions = null;
 	
 	var operations = {
 		'+': function(accumulator) {
@@ -54,21 +53,23 @@ input;
 			}
 		},
 	};
+	
+	function calculateResult(lastResult, currentValue) {
+		if (operations[currentValue]) {
+			 return operations[currentValue](lastResult);
+		}
+		if (typeof lastResult === 'function') {
+			return lastResult(Number(currentValue));
+		}
+		return Number(currentValue);
+	}
 
   function getResult(value) {
 		var calc = value
 			.replace(/\D$/, '')
 			.match(/(?:\d)+|(?:\D)/g);
 
-    return calc.reduce(function(lastResult, currentValue) {
-			if(operations[currentValue]) {
-				 return operations[currentValue](lastResult);
-			}
-			if (typeof lastResult === 'function') {
-				return lastResult(Number(currentValue));
-			}
-			return Number(currentValue);
-		}, 0)
+    return calc.reduce(calculateResult, 0);
   }
 
   function clearInput(value) {
@@ -100,14 +101,26 @@ input;
 	function handleClickClear() {
     updateInput();
   }
-
-  function init() {
-    Array.prototype.forEach.call($actions, function($button) {
+	
+	function initVariables() {
+		$output = doc.querySelector('.output');
+		$result = doc.querySelector('.result');
+		$clear = doc.querySelector('.clear');
+		$actions = doc.querySelectorAll('.action');
+	}
+	
+	function initEvents() {
+		Array.prototype.forEach.call($actions, function($button) {
       $button.addEventListener('click', handleClickAction);
     });
     $result.addEventListener('click', handleClickResult);
     $clear.addEventListener('click', handleClickClear);
+	}
+
+  function init() {
+		initVariables();
+    initEvents();
   }
 
-  init()
+  init();
 })(window, document)
