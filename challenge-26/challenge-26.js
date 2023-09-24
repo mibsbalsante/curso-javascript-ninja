@@ -28,29 +28,29 @@ Só passe para o próximo problema quando tiver resolvido o anterior :)
 		this.$elements = document.querySelectorAll(selector);
 	}
 	
-	DOM.prototype.get = function() {
+	DOM.prototype.get = function get() {
 		return this.$elements;
 	}
 
-	DOM.prototype.on = function(event, callback) {
+	DOM.prototype.on = function on(eventType, callback) {
 		Array.prototype.forEach.call(this.$elements, function($element) {
-			$element.addEventListener(event, callback, false);
+			$element.addEventListener(eventType, callback, false);
 		})
 	}
 
-	DOM.prototype.off = function(event, callback) {
+	DOM.prototype.off = function off(eventType, callback) {
 		Array.prototype.forEach.call(this.$elements, function($element) {
-			$element.removeEventListener(event, callback, false);
+			$element.removeEventListener(eventType, callback, false);
 		})
 	}
 
 	var $a = new DOM('[data-js="link"]');
-	$a.on('click', function(e) {
+	$a.on('click', function handleClick(e) {
 		e.preventDefault();
 		console.log('clicou');
+		$a.off('click', handleClick);
 	});
 
 	console.log('Elementos selecionados:', $a.get());
 	console.log('$a é filho de body?', $a.get()[0].parentNode === document.body);
 })();
- 
