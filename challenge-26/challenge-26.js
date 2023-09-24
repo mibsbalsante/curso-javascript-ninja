@@ -21,33 +21,36 @@ Só passe para o próximo problema quando tiver resolvido o anterior :)
 */
 // ?
 
-class DOM {
-  constructor(selector) {
-		this.$elements = document.querySelectorAll(selector);
-  }
+(function() {
+	'use strict';
 	
-	get() {
-		return this.$elements;
+	function DOM (selector) {
+		this.$elements = document.querySelectorAll(selector);
 	}
 	
-	on(event, callback) {
+	DOM.prototype.get = function() {
+		return this.$elements;
+	}
+
+	DOM.prototype.on = function(event, callback) {
 		Array.prototype.forEach.call(this.$elements, function($element) {
 			$element.addEventListener(event, callback, false);
 		})
 	}
-	
-	off(event, callback) {
+
+	DOM.prototype.off = function(event, callback) {
 		Array.prototype.forEach.call(this.$elements, function($element) {
 			$element.removeEventListener(event, callback, false);
 		})
 	}
-}
 
-var $a = new DOM('[data-js="link"]');
-$a.on('click', function(e) {
-  e.preventDefault();
-  console.log('clicou');
-});
+	var $a = new DOM('[data-js="link"]');
+	$a.on('click', function(e) {
+		e.preventDefault();
+		console.log('clicou');
+	});
 
-console.log('Elementos selecionados:', $a.get());
-console.log('$a é filho de body?', $a.get()[0].parentNode === document.body);
+	console.log('Elementos selecionados:', $a.get());
+	console.log('$a é filho de body?', $a.get()[0].parentNode === document.body);
+})();
+ 
