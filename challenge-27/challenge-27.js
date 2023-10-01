@@ -76,8 +76,8 @@ O método isNull deve retornar `true` se o valor for null ou undefined.
 	}
 	
 	DOM.getType = function(element) {
-		return Object.prototype.toString.call(element)
-			.replace(/^(\[object\s)|(\])$/g, '')
+		return Object.prototype.toString.apply(element)
+			.replace(/^(\[object\s)|(\])$/g, '');
 	}
 
 	DOM.isArray = function(element) {
@@ -99,17 +99,24 @@ O método isNull deve retornar `true` se o valor for null ou undefined.
 		return this.getType(element) === 'Boolean';
 	}
 	DOM.isNull = function(element) {
-		return this.getType(element) === 'Null';
+		const type = this.getType(element);
+		return type === 'Null' || type === 'Undefined';
 	}
 
 	var $a = new DOM('[data-js="link"]');
+
 	$a.on('click', function handleClick(e) {
 		e.preventDefault();
 		console.log('clicou');
 		$a.off('click', handleClick);
 	});
 	
-	console.log('isNull', DOM.isNull(null))
+	console.log('map', $a.map(function map(element) {
+		return element.textContent;
+	}));
+	
+	console.log('null isNull', DOM.isNull(null));
+	console.log('undefined isNull', DOM.isNull(undefined));
 
 	console.log('Elementos selecionados:', $a.get());
 	console.log('$a é filho de body?', $a.get()[0].parentNode === document.body);
