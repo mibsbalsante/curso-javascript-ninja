@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+	<style>
+		form {
+			display: flex;
+			flex-direction: column;
+		}
+	</style>
+</head>
+<body>
+  <form data-js="form">
+		<p data-js="message"></p>
+  	<input data-js="input" name="logradouro" type="text" placeholder="Logradouro">
+  	<input data-js="input" name="bairro" type="text" placeholder="Bairro">
+  	<input data-js="input" name="uf" type="text" placeholder="Estado">
+  	<input data-js="input" name="localidade" type="text" placeholder="Cidade">
+  	<input data-js="cep" name="cep" type="text" placeholder="CEP">
+  	<button data-js="submit" type="submit">enviar</button>
+  </form>
+  <script src="challenge-28.js"></script>
+</body>
+</html>
