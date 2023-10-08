@@ -1,4 +1,5 @@
-  /*
+(function() {
+	/*
   No HTML:
   - Crie um formulário com um input de texto que receberá um CEP e um botão
   de submit;
@@ -25,3 +26,34 @@
   - Utilize a lib DOM criada anteriormente para facilitar a manipulação e
   adicionar as informações em tela.
   */
+	var $cep = document.querySelector('[data-js="cep"]');
+	var $fields = document.querySelectorAll('[data-js="input"]');
+	var $form = document.querySelector('[data-js="form"]');
+	var $message = document.querySelector('[data-js="message"]');
+	
+	function handleAddress(address) {
+		Array.prototype.map.call($fields, function($field) {
+			$field.value = address[$field.getAttribute('name')] || '';
+		})
+	}
+	
+	$form.addEventListener('submit', function(event) {
+		event.preventDefault();
+		
+		var cep = $cep.value;
+		var request = new XMLHttpRequest();
+		
+		$message.textContent = `Buscando informações para o CEP ${cep}...`;
+		
+		request.onload = function() {
+			handleAddress(JSON.parse(this.responseText));
+			$message.textContent = `Endereço referente ao CEP ${cep}.`;
+		}
+		request.onerror = function() {
+			var cep = $cep.value;
+			$message.textContent = `Não encontramos o endereço para o CEP ${cep}.`;
+		}
+		request.open('get', `https://viacep.com.br/ws/${cep}/json/`);
+		request.send();
+	});
+})();
