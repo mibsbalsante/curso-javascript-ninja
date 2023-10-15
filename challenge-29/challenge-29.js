@@ -1,4 +1,4 @@
-(function() {
+(function (DOM) {
   'use strict';
 
   /*
@@ -36,4 +36,58 @@
   que será nomeado de "app".
   */
 
-})();
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    var $fields = new DOM('[data-js="field"]');
+    var $tableBody = new DOM('[data-js="tableBody"]').getIndex(0);
+    var $row = document.createElement('tr');
+
+    $fields.forEach(function ($field) {
+      var $td = document.createElement('td');
+      $td.textContent = $field.value;
+      $row.appendChild($td);
+
+      $field.value = '';
+    });
+
+    $tableBody.appendChild($row);
+  }
+
+  function handleSetAppData(data) {
+    var $name = new DOM('[data-js="companyName"]').getIndex(0);
+    var $phone = new DOM('[data-js="companyPhone"]').getIndex(0);
+
+    try {
+      var appData = JSON.parse(data);
+      $name.textContent = appData.name;
+      $phone.textContent = appData.phone;
+    } catch (e) {
+      console.error('Arquivo em formato incorreto!');
+    }
+  }
+
+  function handleRequestAppData() {
+    var request = new XMLHttpRequest();
+
+    request.onload = function xhrOnLoad() {
+      handleSetAppData(this.responseText);
+    }
+
+    request.onerror = function xhrOnError() {
+      console.error('Arquivo não encontrado!')
+    }
+
+    request.open('get', './company.json');
+    request.send();
+  }
+
+  function app() {
+    var $form = new DOM('[data-js="form"]');
+    $form.on('submit', handleSubmit);
+
+    handleRequestAppData();
+  }
+
+  app();
+})(window.DOM);

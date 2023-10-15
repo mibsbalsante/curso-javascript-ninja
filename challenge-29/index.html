@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    table {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <h1 data-js="companyName"></h1>
+  </nav>
+
+  <br>
+
+  <form data-js="form">
+    <input data-js="field" name="imagem" placeholder="Imagem do carro" required type="url">
+    <input data-js="field" name="modelo" placeholder="Marca/Modelo" required type="text">
+    <input data-js="field" name="ano" placeholder="Ano" required type="number">
+    <input data-js="field" name="placa" placeholder="Placa" required type="text">
+    <input data-js="field" name="cor" placeholder="Cor" required type="text">
+    <button type="submit">Cadastrar</button>
+  </form>
+
+  <br>
+
+  <table data-js="table">
+    <thead>
+      <tr>
+        <th>Imagem</th>
+        <th>Marca/Modelo</th>
+        <th>Ano</th>
+        <th>Placa</th>
+        <th>Cor</th>
+      </tr>
+    </thead>
+    <tbody data-js="tableBody">
+    </tbody>
+  </table>
+
+  <br>
+
+  <footer>
+    <p>Telefone: <span data-js="companyPhone"></span></p>
+  </footer>
+
+  <script src="dom.js"></script>
+  <script src="challenge-29.js"></script>
+</body>
+
+</html>
