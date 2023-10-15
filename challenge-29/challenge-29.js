@@ -1,4 +1,4 @@
-(function (DOM) {
+(function ($) {
   'use strict';
 
   /*
@@ -36,58 +36,70 @@
   que será nomeado de "app".
   */
 
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    var $fields = new DOM('[data-js="field"]');
-    var $tableBody = new DOM('[data-js="tableBody"]').getIndex(0);
-    var $row = document.createElement('tr');
-
-    $fields.forEach(function ($field) {
-      var $td = document.createElement('td');
-      $td.textContent = $field.value;
-      $row.appendChild($td);
-
-      $field.value = '';
-    });
-
-    $tableBody.appendChild($row);
-  }
-
-  function handleSetAppData(data) {
-    var $name = new DOM('[data-js="companyName"]').getIndex(0);
-    var $phone = new DOM('[data-js="companyPhone"]').getIndex(0);
-
-    try {
-      var appData = JSON.parse(data);
-      $name.textContent = appData.name;
-      $phone.textContent = appData.phone;
-    } catch (e) {
-      console.error('Arquivo em formato incorreto!');
-    }
-  }
-
-  function handleRequestAppData() {
-    var request = new XMLHttpRequest();
-
-    request.onload = function xhrOnLoad() {
-      handleSetAppData(this.responseText);
-    }
-
-    request.onerror = function xhrOnError() {
-      console.error('Arquivo não encontrado!')
-    }
-
-    request.open('get', './company.json');
-    request.send();
-  }
-
   function app() {
-    var $form = new DOM('[data-js="form"]');
-    $form.on('submit', handleSubmit);
+    return {
+      isReady: function isReady() {
+        return this.readyState === 4 && this.status === 200;
+      },
 
-    handleRequestAppData();
+      setAppData: function setAppData(data) {
+        var $name = $('[data-js="companyName"]').get(0);
+        var $phone = $('[data-js="companyPhone"]').get(0);
+
+        try {
+          var appData = JSON.parse(data);
+          $name.textContent = appData.name;
+          $phone.textContent = appData.phone;
+        } catch (e) {
+          console.error('Arquivo em formato incorreto!');
+        }
+      },
+
+      getAppData: function getAppData() {
+        var self = this;
+        var request = new XMLHttpRequest();
+        request.addEventListener('readystatechange', function xhrOnReady() {
+          if (self.isReady.call(this)) {
+            self.setAppData(this.responseText);
+          }
+        })
+        request.open('get', './company.json', true);
+        request.send();
+      },
+
+      handleSubmit: function handleSubmit(event) {
+        event.preventDefault();
+
+        var $fields = $('[data-js="field"]');
+        var $tableBody = $('[data-js="tableBody"]').get(0);
+        var $row = document.createElement('tr');
+
+        $fields.forEach(function ($field) {
+          var $td = document.createElement('td');
+
+          if ($field.type === 'url') {
+            var $img = document.createElement('img');
+            $img.src = $field.value
+            $td.appendChild($img);
+          } else {
+            $td.textContent = $field.value;
+          }
+
+          $row.appendChild($td);
+          $field.value = '';
+        });
+
+        $tableBody.appendChild($row);
+      },
+
+      init: function init() {
+        var $form = $('[data-js="form"]');
+        $form.on('submit', this.handleSubmit);
+
+        this.getAppData();
+      }
+    }
   }
 
-  app();
+  app().init();
 })(window.DOM);

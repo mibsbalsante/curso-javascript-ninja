@@ -2,15 +2,17 @@
   'use strict';
 
   function DOM(selector) {
+    if (!(this instanceof DOM)) {
+      return new DOM(selector);
+    }
     this.$elements = document.querySelectorAll(selector);
   }
 
-  DOM.prototype.get = function get() {
+  DOM.prototype.get = function get(ind = null) {
+    if (DOM.isNumber(ind)) {
+      return this.$elements[ind];
+    }
     return this.$elements;
-  }
-
-  DOM.prototype.getIndex = function getIndex(ind = 0) {
-    return this.$elements[ind];
   }
 
   DOM.prototype.on = function on(eventType, callback) {
